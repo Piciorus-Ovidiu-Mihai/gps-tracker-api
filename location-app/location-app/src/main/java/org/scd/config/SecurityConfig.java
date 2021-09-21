@@ -1,9 +1,9 @@
 package org.scd.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,6 +12,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -19,7 +23,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private static final String ADMIN_ROLE = "ADMIN";
     private static final String BASIC_USER_ROLE = "BASIC_USER";
-
     private final UserDetailsService userDetailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -27,11 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                           final BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.userDetailsService = userDetailsService;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
-    }
-
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(this.userDetailsService).passwordEncoder(this.bCryptPasswordEncoder);
     }
 
     @Override
@@ -55,6 +53,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/locations/filterByStartAndEnd").hasAnyRole(ADMIN_ROLE)
                 .antMatchers("/locations/delete/{locationid}").hasAnyRole(ADMIN_ROLE,BASIC_USER_ROLE)
                 .antMatchers("/locations/createLocation").hasAnyRole(ADMIN_ROLE,BASIC_USER_ROLE)
+                .antMatchers("/locations/all-locations").hasAnyRole(ADMIN_ROLE,BASIC_USER_ROLE)
+                .antMatchers("/todo").hasAnyRole(ADMIN_ROLE,BASIC_USER_ROLE)
                 .anyRequest()
                 .authenticated()
                 .and()

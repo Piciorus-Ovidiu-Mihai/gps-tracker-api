@@ -2,45 +2,44 @@ package org.scd.service;
 
 
 import org.scd.config.exception.BusinessException;
-import org.scd.model.User;
+import org.scd.mapper.UserLocationMapper;
 import org.scd.model.UserLocation;
-import org.scd.model.dto.UserLocationAdminDTO;
+import org.scd.model.dto.UserLocationFilterDTO;
 import org.scd.model.dto.UserLocationDTO;
 import org.scd.repository.UserLocationRepository;
 import org.scd.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserLocationServiceImpl implements UserLocationService {
 
-    @Autowired
-    private UserLocationRepository locationRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserLocationRepository userLocationRepository;
 
-    @Autowired
-    private UserLocationRepository userLocationRepository;
+    private final UserLocationMapper userLocationMapper;
 
-
-    public List<UserLocation> getAllLocations() {
-        List<UserLocation> userLocations = new ArrayList<>();
-        locationRepository.findAll().forEach(userLocations::add);
-        return userLocations;
+    public UserLocationServiceImpl(UserRepository userRepository, UserLocationRepository userLocationRepository, UserLocationMapper userLocationMapper) {
+        this.userRepository = userRepository;
+        this.userLocationRepository = userLocationRepository;
+        this.userLocationMapper = userLocationMapper;
     }
 
+    @Override
+    public Iterable<UserLocation> getAllLocations() {
+        return userLocationRepository.findAll();
+    }
+
+    @Override
     public UserLocation getLocationById(Long id) {
-        return locationRepository.getById(id);
+        return userLocationRepository.getById(id);
     }
 
+    @Override
     public void deleteById(Long id) {
-        locationRepository.deleteById(id);
+        userLocationRepository.deleteById(id);
     }
 
     @Override
@@ -48,20 +47,18 @@ public class UserLocationServiceImpl implements UserLocationService {
         UserLocation userLocationUpdated = userLocationRepository.getById(id);
         if(!(userLocation.getLatitude()==null)) userLocationUpdated.setLatitude(userLocation.getLatitude());
         if(!(userLocation.getLongitude()==null)) userLocationUpdated.setLongitude(userLocation.getLongitude());
-        return locationRepository.save(userLocationUpdated);
+        return userLocationRepository.save(userLocationUpdated);
     }
 
     @Override
-    public UserLocationDTO addLocation(UserLocationDTO userLocationDTO) {
-
-        locationRepository.save(new UserLocation(userLocationDTO.getLatitude(), userLocationDTO.getLongitude(), userLocationDTO.getCreationDate(), userRepository.findByEmail(userLocationDTO.getEmail())));
-        return null;
+    public UserLocation addLocation(UserLocationDTO userLocationDTO) {
+        return userLocationRepository.save(new UserLocation(userLocationDTO.getLatitude(), userLocationDTO.getLongitude(), userLocationDTO.getCreationDate(), userRepository.findByEmail(userLocationDTO.getEmail())));
     }
 
-    public List<UserLocation> getLocationsBetweenDates(UserLocationAdminDTO userLocationAdminDTO) throws BusinessException{
-        if (userLocationAdminDTO.getStartDate().compareTo(userLocationAdminDTO.getEndDate()) > 0)
+    @Override
+    public List<UserLocation> getLocationsBetweenDates(UserLocationFilterDTO userLocationFilterDTO) throws BusinessException{
+        if (userLocationFilterDTO.getStartDate().compareTo(userLocationFilterDTO.getEndDate()) > 0)
             throw new BusinessException(402, "End date cannot be before start date");
-        return userLocationRepository.customQuery(userLocationAdminDTO.getUserId(),userLocationAdminDTO.getStartDate(),userLocationAdminDTO.getEndDate());
+        return userLocationRepository.customQuery(userLocationFilterDTO.getUserId(), userLocationFilterDTO.getStartDate(), userLocationFilterDTO.getEndDate());
     }
-
 }

@@ -1,18 +1,23 @@
 package org.scd.service;
 
+import org.scd.config.exception.BusinessException;
 import org.scd.model.UserLocation;
-import org.scd.model.dto.UserLocationAdminDTO;
 import org.scd.model.dto.UserLocationDTO;
-import org.springframework.data.jpa.repository.Query;
+import org.scd.model.dto.UserLocationFilterDTO;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 public interface UserLocationService {
 
     UserLocation update(UserLocation userLocation,final Long id);
 
-    UserLocationDTO addLocation(final UserLocationDTO userLocationDTO);
+    UserLocation addLocation(final UserLocationDTO userLocationDTO);
 
+    Iterable<UserLocation> getAllLocations();
+
+    UserLocation getLocationById(Long id);
+
+    void deleteById(Long id);
+
+    List<UserLocation> getLocationsBetweenDates(UserLocationFilterDTO userLocationFilterDTO) throws BusinessException;
 }

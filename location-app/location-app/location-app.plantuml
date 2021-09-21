@@ -79,7 +79,7 @@ title __USERLOCATION-APP's Class Diagram__\n
   namespace org.scd {
     namespace model {
       namespace dto {
-        class org.scd.model.dto.UserLocationAdminDTO {
+        class org.scd.model.dto.UserLocationFilterDTO {
         }
       }
     }

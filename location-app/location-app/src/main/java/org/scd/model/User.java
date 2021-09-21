@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "USERS")
-public class User implements Serializable {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -34,6 +34,9 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "user")
     private Set<UserLocation> userLocations;
+
+    @OneToMany(mappedBy = "user")
+    private Set<UserToDoItem> userToDoItems;
 
     public User() {
     }
