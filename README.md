@@ -7,7 +7,10 @@ As a future, the web application has a to do list, for everyone who wants to kee
   <img src="https://github.com/Piciorus-Ovidiu-Mihai/gps-tracker/blob/main/gps-tracker-api-architecture.png">
 </p>
 
-## 📷 Preview  
+## 📷 Preview 
+<p align="center">
+  <img src="https://github.com/Piciorus-Ovidiu-Mihai/gps-tracker/blob/main/gps-tracker-section.png">
+</p>
 
 ## 🛡️ Key Features
 Some explenations about what this application brings. You can use here some bullets points.
