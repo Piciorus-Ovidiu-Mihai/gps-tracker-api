@@ -3,6 +3,9 @@ This is an api for a GPS tracker and a to do list application. This project was 
 As a future, the web application has a to do list, for everyone who wants to keep their work.
 
 ## 🛠️ Architecture
+<p align="center">
+  <img src="https://github.com/Piciorus-Ovidiu-Mihai/gps-tracker/blob/main/gps-tracker-api-architecture.png">
+</p>
 
 ## 📷 Preview  
 
